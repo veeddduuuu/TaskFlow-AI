@@ -1,0 +1,27 @@
+{
+  "name": "taskflow-ai",
+  "version": "1.0.0",
+  "description": "TaskFlow AI is an AI-powered project management platform designed for student teams, focused on reducing the mental overhead of planning and organizing work.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/veeddduuuu/TaskFlow-AI.git"
+  },
+  "keywords": [
+    "backend",
+    "ai",
+    "tasks",
+    "project",
+    "management",
+    "projects"
+  ],
+  "author": "Vedant-Shende",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/veeddduuuu/TaskFlow-AI/issues"
+  },
+  "homepage": "https://github.com/veeddduuuu/TaskFlow-AI#readme"
+}
