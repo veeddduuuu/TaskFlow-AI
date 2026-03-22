@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/veeddduuuu/TaskFlow-AI/issues"
   },
-  "homepage": "https://github.com/veeddduuuu/TaskFlow-AI#readme"
+  "homepage": "https://github.com/veeddduuuu/TaskFlow-AI#readme",
+  "devDependencies": {
+    "prettier": "3.8.1"
+  }
 }
