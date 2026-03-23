@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+
 const app = express();
 
 //basic configuration
@@ -19,5 +20,9 @@ app.get("/", (req, res) => {
     console.log("Hello This is TaskFlow AI");
     res.send("Hello This is TaskFlow AI");
 })
+
+import healthcheckRoutes from "./routes/healthcheck.routes.js";
+
+app.use("/api/v1/healthcheck", healthcheckRoutes);
 
 export default app;
