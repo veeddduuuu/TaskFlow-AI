@@ -25,4 +25,8 @@ import healthcheckRoutes from "./routes/healthcheck.routes.js";
 
 app.use("/api/v1/healthcheck", healthcheckRoutes);
 
+import authRoutes from "./routes/auth.routes.js";
+
+app.use("/api/v1/auth", authRoutes);
+
 export default app;
