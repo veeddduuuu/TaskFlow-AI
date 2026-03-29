@@ -1,8 +1,3 @@
 # backend
 backend/node_modules
 backend/.env
-
-# root (future frontend etc)
-node_modules
-.env
-*.log
