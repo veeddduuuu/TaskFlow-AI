@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-300: #93c5fd;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+  --color-brand-800: #1e40af;
+  --color-brand-900: #1e3a8a;
+  --color-brand-950: #172554;
+
+  --color-purple-brand-500: #8b5cf6;
+  --color-purple-brand-600: #7c3aed;
+
+  --color-dark-bg: #030712;
+  --color-dark-card: #111827;
+  --color-dark-border: #1f2937;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+  }
+
+  .dark {
+    /* Hardcoding it to dark mode for the SaaS aesthetic as approved */
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 40% 98%;
+  }
+
+  body {
+    background-color: var(--color-dark-bg);
+    color: white;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+/* Utilities for gradient text */
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-400 to-purple-brand-500;
+  }
+  .bg-primary-gradient {
+    @apply bg-gradient-to-r from-brand-600 to-purple-brand-600 hover:from-brand-500 hover:to-purple-brand-500 transition-all duration-300;
+  }
+}
