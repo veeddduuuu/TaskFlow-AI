@@ -2,10 +2,10 @@
   "name": "taskflow-ai",
   "version": "1.0.0",
   "description": "TaskFlow AI is an AI-powered project management platform designed for student teams, focused on reducing the mental overhead of planning and organizing work.",
-  "main": "src/index.js",
+  "main": "backend/src/index.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
+    "dev": "nodemon backend/src/index.js",
+    "start": "node backend/src/index.js"
   },
   "repository": {
     "type": "git",
