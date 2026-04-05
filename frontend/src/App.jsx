@@ -2,7 +2,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LandingPage from './pages/LandingPage';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
-import Execution from './pages/Execution';
+import Execution from './pages/execution/Execution';
+import Dashboard from './pages/dashboard/Dashboard';
+import ProjectTasks from './pages/projects/ProjectTasks';
+import TaskDetail from './pages/tasks/TaskDetail';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
@@ -30,6 +33,30 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <Execution />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/dashboard" 
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/projects/:projectId/tasks" 
+        element={
+          <ProtectedRoute>
+            <ProjectTasks />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/tasks/:taskId" 
+        element={
+          <ProtectedRoute>
+            <TaskDetail />
           </ProtectedRoute>
         } 
       />

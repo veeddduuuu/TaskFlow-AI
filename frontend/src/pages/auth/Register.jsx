@@ -3,45 +3,63 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import AuthLayout from '../../components/auth/AuthLayout';
 import InputField from '../../components/auth/InputField';
-import { UserPlus, ArrowRight } from 'lucide-react';
+import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
 const Register = () => {
-  const [formData, setFormData] = useState({ 
-    username: '', 
-    email: '', 
-    password: '', 
-    confirmPassword: '' 
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMsg, setSuccessMsg] = useState('');
   const navigate = useNavigate();
   const { register } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
+    // Auto-lowercase username since backend requires it
+    const finalValue = name === 'username' ? value.toLowerCase() : value;
+    setFormData((prev) => ({ ...prev, [name]: finalValue }));
+    if (errors[name] || errors.server) {
       setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
+        const next = { ...prev };
+        delete next[name];
+        delete next.server;
+        return next;
       });
     }
   };
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.username) newErrors.username = 'Name is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Invalid email format';
-    
-    if (!formData.password) newErrors.password = 'Password is required';
-    else if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters';
-    
+
+    if (!formData.username) {
+      newErrors.username = 'Username is required';
+    } else if (formData.username.length < 3) {
+      newErrors.username = 'Username must be at least 3 characters';
+    } else if (!/^[a-z0-9_]+$/.test(formData.username)) {
+      newErrors.username = 'Only lowercase letters, numbers, and underscores allowed';
+    }
+
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Invalid email format';
+    }
+
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
-    
+
     return newErrors;
   };
 
@@ -57,14 +75,12 @@ const Register = () => {
     const result = await register({
       username: formData.username,
       email: formData.email,
-      password: formData.password
+      password: formData.password,
     });
 
     if (result.success) {
-      // In a real app, we might redirect to a 'verify email' page
-      // For now, we'll redirect to login with a message
-      alert(result.message);
-      navigate('/auth/login');
+      setSuccessMsg('Account created! Please check your email to verify, then log in.');
+      setTimeout(() => navigate('/auth/login'), 3000);
     } else {
       setErrors({ server: result.message });
     }
@@ -72,26 +88,41 @@ const Register = () => {
   };
 
   return (
-    <AuthLayout 
-      title="Create an account" 
+    <AuthLayout
+      title="Create an account"
       subtitle="Join TaskFlow AI and start executing with precision."
     >
       <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Server error */}
         {errors.server && (
-          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-sm text-center">
+          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm text-center">
             {errors.server}
           </div>
         )}
 
+        {/* Success message */}
+        {successMsg && (
+          <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-xl text-green-400 text-sm flex items-center gap-2">
+            <CheckCircle2 size={16} className="shrink-0" />
+            {successMsg}
+          </div>
+        )}
+
         <div className="space-y-4">
-          <InputField
-            label="Full Name"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            placeholder="John Doe"
-            error={errors.username}
-          />
+          {/* Username — backend requires lowercase */}
+          <div>
+            <InputField
+              label="Username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              placeholder="johndoe"
+              error={errors.username}
+            />
+            <p className="text-xs text-gray-600 mt-1 pl-1">
+              Lowercase letters, numbers and underscores only
+            </p>
+          </div>
 
           <InputField
             label="Email Address"
@@ -126,11 +157,11 @@ const Register = () => {
 
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !!successMsg}
           className="w-full h-12 bg-primary-gradient rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg shadow-brand-500/10 hover:shadow-brand-500/20 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none mt-2 cursor-pointer"
         >
           {isSubmitting ? (
-            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
           ) : (
             <>
               Create Account

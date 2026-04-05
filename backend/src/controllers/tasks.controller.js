@@ -63,18 +63,26 @@ export const createTask = asyncHandler(async (req, res) => {
         }
     }
 
-    const task = await Task.create({
+    const taskData = {
         title,
         description,
         project: projectId,
-        assignedTo,
-        priority,
-        deadline,
+        priority: priority || "medium",
         assignedBy: req.user._id,
         createdBy: req.user._id
-    });
+    };
 
-    res.status(201).json(new APIResponse(201, task, "Task created successfully"));
+    if (assignedTo && assignedTo.trim() !== "") {
+        taskData.assignedTo = assignedTo;
+    }
+
+    if (deadline && deadline.trim() !== "") {
+        taskData.deadline = deadline;
+    }
+
+    const task = await Task.create(taskData);
+
+    res.status(201).json(new APIResponse(201, "Task created successfully", task));
 });
 
 // PATCH /tasks/:taskId
@@ -111,9 +119,13 @@ export const updateTask = asyncHandler(async (req, res) => {
     if (isAdmin || isCreator) {
         if (title !== undefined) task.title = title;
         if (description !== undefined) task.description = description;
-        if (assignedTo !== undefined) task.assignedTo = assignedTo;
+        if (assignedTo !== undefined) {
+             task.assignedTo = (assignedTo && assignedTo.trim() !== "") ? assignedTo : undefined;
+        }
         if (priority !== undefined) task.priority = priority;
-        if (deadline !== undefined) task.deadline = deadline;
+        if (deadline !== undefined) {
+             task.deadline = (deadline && deadline.trim() !== "") ? deadline : undefined;
+        }
     }
 
     // Assignee can update status (or admin/creator)
@@ -121,7 +133,7 @@ export const updateTask = asyncHandler(async (req, res) => {
 
     await task.save();
 
-    res.status(200).json(new APIResponse(200, task, "Task updated successfully"));
+    res.status(200).json(new APIResponse(200, "Task updated successfully", task));
 });
 
 // DELETE /tasks/:taskId
@@ -149,7 +161,7 @@ export const deleteTask = asyncHandler(async (req, res) => {
 
     await task.deleteOne();
 
-    res.status(200).json(new APIResponse(200, null, "Task deleted successfully"));
+    res.status(200).json(new APIResponse(200, "Task deleted successfully", null));
 });
 
 // GET /projects/:projectId/tasks
@@ -181,7 +193,7 @@ export const getTasks = asyncHandler(async (req, res) => {
         .populate("createdBy", "name email")
         .lean();
 
-    res.status(200).json(new APIResponse(200, tasks, "Tasks fetched successfully"));
+    res.status(200).json(new APIResponse(200, "Tasks fetched successfully", tasks));
 });
 
 // GET /tasks/:taskId
@@ -204,7 +216,7 @@ export const getSingleTask = asyncHandler(async (req, res) => {
         throw new APIError(403, "You are not authorized to view this task");
     }
     
-    res.status(200).json(new APIResponse(200, task, "Task fetched successfully"));
+    res.status(200).json(new APIResponse(200, "Task fetched successfully", task));
 });
 
 // PATCH /tasks/:taskId/status
@@ -231,7 +243,7 @@ export const updateStatus = asyncHandler(async (req, res) => {
 
     await task.save();
     
-    res.status(200).json(new APIResponse(200, task, "Task status updated successfully"));
+    res.status(200).json(new APIResponse(200, "Task status updated successfully", task));
 });
 
 // POST /tasks/:taskId/subtasks
@@ -261,7 +273,7 @@ export const createSubTask = asyncHandler(async (req, res) => {
     task.subTasks.push({ title });
     await task.save();
 
-    res.status(201).json(new APIResponse(201, task, "Subtask created successfully"));
+    res.status(201).json(new APIResponse(201, "Subtask created successfully", task));
 });
 
 // DELETE /tasks/:taskId/subtasks/:subtaskId
@@ -291,7 +303,7 @@ export const deleteSubTask = asyncHandler(async (req, res) => {
     subTask.deleteOne();
     await task.save();
 
-    res.status(200).json(new APIResponse(200, task, "Subtask deleted successfully"));
+    res.status(200).json(new APIResponse(200, "Subtask deleted successfully", task));
 });
 
 // PATCH /tasks/:taskId/subtasks/:subtaskId
@@ -323,5 +335,5 @@ export const updateSubTask = asyncHandler(async (req, res) => {
     
     await task.save();
 
-    res.status(200).json(new APIResponse(200, task, "Subtask updated successfully"));
+    res.status(200).json(new APIResponse(200, "Subtask updated successfully", task));
 });

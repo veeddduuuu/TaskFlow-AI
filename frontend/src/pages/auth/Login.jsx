@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import AuthLayout from '../../components/auth/AuthLayout';
 import InputField from '../../components/auth/InputField';
-import { LogIn, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -66,14 +66,7 @@ const Login = () => {
           />
         </div>
 
-        <div className="flex items-center justify-end">
-          <Link 
-            to="/auth/forgot-password" 
-            className="text-sm font-medium text-brand-400 hover:text-brand-300 transition-colors"
-          >
-            Forgot password?
-          </Link>
-        </div>
+
 
         <button
           type="submit"

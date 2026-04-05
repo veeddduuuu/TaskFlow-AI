@@ -1,0 +1,218 @@
+# PRD – Task Detail Page
+
+## 1. Purpose
+
+> 👉 *“What exactly needs to be done for this task?”*
+> 
+
+This page:
+
+- breaks task into **subtasks**
+- gives clarity
+- tracks real progress
+
+---
+
+## 2. Route
+
+```bash
+/tasks/:taskId
+```
+
+---
+
+## 3. Entry Behavior
+
+### On Load:
+
+```bash
+GET /api/v1/tasks/:projectId/t/:taskId
+```
+
+---
+
+## 4. Page Layout
+
+---
+
+## 🔹 Top Section (Task Context)
+
+**Left:**
+
+- Task Title (large)
+- Project Name (small, muted)
+
+**Right:**
+
+- Status badge
+- Edit (optional)
+- Delete (admin/project_admin)
+
+---
+
+### Metadata Row:
+
+- Assigned user
+- Priority
+- Deadline
+
+---
+
+## 🔹 Main Section (Subtasks)
+
+This is the **core of the page**
+
+---
+
+## 5. Subtask List
+
+---
+
+### 🧾 Each Subtask:
+
+- Checkbox (complete/incomplete)
+- Subtask title
+- Delete icon
+
+---
+
+### Behavior:
+
+- Click checkbox → toggle complete
+- Instant UI update (optimistic)
+
+---
+
+## 6. Add Subtask
+
+---
+
+### Input:
+
+- Inline input field (not modal)
+
+Example:
+
+```
+[ + Add a subtask... ]
+```
+
+---
+
+### API:
+
+```bash
+POST /api/v1/subtasks/:taskId
+```
+
+---
+
+## 7. Progress Indicator (Important)
+
+At top:
+
+> **3 / 5 subtasks completed**
+> 
+
+Optional:
+
+- progress bar
+
+---
+
+## 8. Task Status Logic (Important)
+
+---
+
+### Auto behavior (optional but 🔥 if you do it):
+
+- All subtasks complete → task = DONE
+- Any subtask incomplete → task ≠ DONE
+
+---
+
+### Manual control (fallback):
+
+- Allow status change like before
+
+---
+
+## 9. States
+
+---
+
+### 🟡 Loading
+
+- Skeleton for:
+    - title
+    - subtasks
+
+---
+
+### 🔴 Empty
+
+> “No subtasks yet. Break this down.”
+> 
+
+---
+
+### ❌ Error
+
+- Retry option
+
+---
+
+## 10. Component Structure
+
+```bash
+/pages/tasks/
+  TaskDetail.jsx
+
+/components/subtasks/
+  SubtaskItem.jsx
+  SubtaskList.jsx
+  AddSubtaskInput.jsx
+  ProgressBar.jsx
+```
+
+---
+
+## 11. UX Rules
+
+- No modal for subtasks ❌
+- No overdesign ❌
+- Fast toggling ✅
+- Clear progress ✅
+
+---
+
+## 12. What NOT to Do
+
+- ❌ Don’t add comments (waste of time)
+- ❌ Don’t add attachments
+- ❌ Don’t build Notion 2.0
+
+Stay focused.
+
+---
+
+## 13. What Makes This Page Good
+
+- You can break a task into steps in seconds
+- You see progress instantly
+- It feels actionable, not informational
+
+---
+
+## 14. What I Would Do (If I were you)
+
+Build in this order:
+
+1. Fetch + render task
+2. Subtask list
+3. Toggle complete
+4. Add subtask
+5. Delete subtask
+6. Progress indicator
+
+Done. Move on.

@@ -32,7 +32,7 @@ const createProject = asyncHandler(async(req, res) => {
 
     return res
         .status(201)
-        .json(new APIResponse(201, project, "Project Created Successfully"))
+        .json(new APIResponse(201, "Project Created Successfully", project))
 });
 
 //DELETE /projects/:projectId
@@ -54,7 +54,7 @@ const deleteProject = asyncHandler(async(req, res) => {
 
     return res
         .status(200)    
-        .json(new APIResponse(200, null, "Project Deleted Successfully"))
+        .json(new APIResponse(200, "Project Deleted Successfully", null))
 
 });
 
@@ -87,7 +87,7 @@ const updateProject = asyncHandler(async(req, res) => {
 
     return res
         .status(200)
-        .json(new APIResponse(200, project, "Project Updated Successfully"))
+        .json(new APIResponse(200, "Project Updated Successfully", project))
 
 })
 
@@ -101,7 +101,7 @@ const getUserProjects = asyncHandler(async(req, res) => {
 
     return res
         .status(200)
-        .json(new APIResponse(200, projects, "Projects Fetched Successfully"))
+        .json(new APIResponse(200, "Projects Fetched Successfully", projects))
 });
 
 //GET /projects/:projectId
@@ -113,7 +113,7 @@ const getProjectById = asyncHandler(async(req, res) => {
     }
     return res
         .status(200)
-        .json(new APIResponse(200, project, "Project Fetched Successfully"))
+        .json(new APIResponse(200, "Project Fetched Successfully", project))
 })
 
 //POST /projects/:projectId/members
