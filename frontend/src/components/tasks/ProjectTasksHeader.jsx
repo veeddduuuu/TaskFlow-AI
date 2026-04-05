@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
-import { ChevronLeft, Plus } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ChevronLeft, Plus, Users } from 'lucide-react';
+import { Link, useParams } from 'react-router-dom';
 
 const ProjectTasksHeader = ({ projectName, taskCount, onCreateClick, isAdmin }) => {
+  const { projectId } = useParams();
+
   return (
     <div className="flex flex-col gap-6 mb-8">
       {/* Back Link */}
@@ -30,17 +32,27 @@ const ProjectTasksHeader = ({ projectName, taskCount, onCreateClick, isAdmin }) 
           </p>
         </div>
 
-        {isAdmin && (
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={onCreateClick}
-            className="flex items-center justify-center gap-2 px-6 py-3 bg-primary-gradient text-white rounded-xl font-bold shadow-lg shadow-brand-600/20 transition-all"
+        <div className="flex items-center gap-3">
+          <Link
+            to={`/projects/${projectId}/members`}
+            className="flex items-center gap-2 px-4 py-3 bg-dark-bg border border-dark-border hover:border-gray-600 text-gray-300 hover:text-white rounded-xl font-medium transition-all"
           >
-            <Plus size={20} />
-            Create Task
-          </motion.button>
-        )}
+            <Users size={18} />
+            Members
+          </Link>
+          
+          {isAdmin && (
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={onCreateClick}
+              className="flex items-center justify-center gap-2 px-6 py-3 bg-primary-gradient text-white rounded-xl font-bold shadow-lg shadow-brand-600/20 transition-all"
+            >
+              <Plus size={20} />
+              Create Task
+            </motion.button>
+          )}
+        </div>
       </div>
     </div>
   );

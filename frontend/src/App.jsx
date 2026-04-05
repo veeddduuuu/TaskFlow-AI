@@ -6,6 +6,7 @@ import Execution from './pages/execution/Execution';
 import Dashboard from './pages/dashboard/Dashboard';
 import ProjectTasks from './pages/projects/ProjectTasks';
 import TaskDetail from './pages/tasks/TaskDetail';
+import ProjectMembers from './pages/projects/ProjectMembers';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
@@ -49,6 +50,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <ProjectTasks />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/projects/:projectId/members" 
+        element={
+          <ProtectedRoute>
+            <ProjectMembers />
           </ProtectedRoute>
         } 
       />
