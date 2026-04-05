@@ -55,11 +55,16 @@ export const registerUser = asyncHandler(async (req, res) => {
 
     await newUser.save({ validateBeforeSave: false });
 
-    await sendEmail({
-        email: newUser?.email,
-        subject: "Email Verification",
-        mailGenContent: emailVerificationMailGenContent(newUser.username, `${req.protocol}://${req.get("host")}/api/v1/auth/verify-email/${unHashedToken}`)
-    })
+    try {
+        await sendEmail({
+            email: newUser?.email,
+            subject: "Email Verification",
+            mailGenContent: emailVerificationMailGenContent(newUser.username, `${req.protocol}://${req.get("host")}/api/v1/auth/verify-email/${unHashedToken}`)
+        });
+    } catch (error) {
+        console.error("Email verification skipped (SMTP unconfigured or failed):", error.message);
+        // We don't throw here to allow development registration without SMTP
+    }
 
     // const createdUser = await User.findById(newUser._id).select("-password -refreshToken -emailVerificationToken -emailVerificationTokenExpires -passwordResetToken -passwordResetTokenExpires");
 
@@ -80,7 +85,12 @@ export const login = asyncHandler(async (req, res) => {
         throw new APIError(400, "Email or username and password are required");
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({
+        $or: [
+            { email: email || username },
+            { username: email || username }
+        ]
+    });
 
     if (!user) {
         throw new APIError(404, "User not found");

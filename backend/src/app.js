@@ -14,8 +14,8 @@ app.use(express.static("public"));
 
 //cors configugration
 app.use(cors({
-    origin: process.env.CORS_ORGIN?.split(",") || "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    origin: process.env.CORS_ORIGIN === "*" ? true : process.env.CORS_ORIGIN?.split(",") || ["http://localhost:5173", "http://localhost:5174"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }));
@@ -40,5 +40,9 @@ app.use("/api/v1/projects", projectRoutes);
 import taskRoutes from "./routes/tasks.routes.js";
 
 app.use("/api/v1/", taskRoutes);
+
+// Global Error Handler
+import { errorHandler } from "./middlewares/error.middleware.js";
+app.use(errorHandler);
 
 export default app; 
